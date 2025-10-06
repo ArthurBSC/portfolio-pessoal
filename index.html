@@ -1156,6 +1156,14 @@
 
           <h3 class="h3 form-title">Formulário de Contato</h3>
 
+          <!-- Área de feedback -->
+          <div id="form-feedback" class="form-feedback" style="display: none;">
+            <div class="feedback-content">
+              <ion-icon name="checkmark-circle" class="feedback-icon success"></ion-icon>
+              <p class="feedback-message">Mensagem enviada com sucesso! Entrarei em contato em breve.</p>
+            </div>
+          </div>
+
           <form action="#" class="form" data-form>
 
             <div class="input-wrapper">
@@ -1191,6 +1199,11 @@
   -->
   <script src="./recursos/scripts/script.js"></script>
 
+  <!--
+    - EmailJS SDK
+  -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
   <!--
     - ionicon link
   -->

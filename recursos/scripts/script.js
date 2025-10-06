@@ -119,6 +119,90 @@ for (let i = 0; i < filterBtn.length; i++) {
 const form = document.querySelector("[data-form]");
 const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
+const feedbackDiv = document.getElementById("form-feedback");
+
+// Inicializar EmailJS (você precisará substituir por suas próprias credenciais)
+(function() {
+  emailjs.init("YOUR_PUBLIC_KEY"); // Substitua pela sua chave pública do EmailJS
+})();
+
+// Função para mostrar feedback
+function showFeedback(type, message) {
+  const feedbackContent = feedbackDiv.querySelector('.feedback-content');
+  const icon = feedbackContent.querySelector('.feedback-icon');
+  const messageElement = feedbackContent.querySelector('.feedback-message');
+  
+  // Remover classes anteriores
+  icon.className = 'feedback-icon';
+  
+  if (type === 'success') {
+    icon.classList.add('success');
+    icon.setAttribute('name', 'checkmark-circle');
+  } else {
+    icon.classList.add('error');
+    icon.setAttribute('name', 'close-circle');
+  }
+  
+  messageElement.textContent = message;
+  feedbackDiv.style.display = 'block';
+  
+  // Esconder feedback após 5 segundos
+  setTimeout(() => {
+    feedbackDiv.style.display = 'none';
+  }, 5000);
+}
+
+// Função para enviar email
+function sendEmail(formData) {
+  const templateParams = {
+    from_name: formData.get('fullname'),
+    from_email: formData.get('email'),
+    message: formData.get('message'),
+    to_email: 'arthurbrunocesar2005@hotmail.com' // Seu email
+  };
+
+  // Substitua 'YOUR_SERVICE_ID' e 'YOUR_TEMPLATE_ID' pelas suas credenciais do EmailJS
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+    .then(function(response) {
+      console.log('Email enviado com sucesso!', response.status, response.text);
+      showFeedback('success', 'Mensagem enviada com sucesso! Entrarei em contato em breve.');
+      form.reset(); // Limpar formulário
+      formBtn.setAttribute("disabled", ""); // Desabilitar botão novamente
+    }, function(error) {
+      console.log('Erro ao enviar email:', error);
+      showFeedback('error', 'Erro ao enviar mensagem. Tente novamente ou entre em contato diretamente pelo email.');
+    });
+}
+
+// Adicionar evento de submit ao formulário
+form.addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevenir envio padrão
+  
+  const formData = new FormData(form);
+  
+  // Validar campos
+  if (!form.checkValidity()) {
+    showFeedback('error', 'Por favor, preencha todos os campos corretamente.');
+    return;
+  }
+  
+  // Mostrar loading no botão
+  const originalText = formBtn.innerHTML;
+  formBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon><span>Enviando...</span>';
+  formBtn.setAttribute("disabled", "");
+  
+  // Simular envio (substitua por sendEmail(formData) quando configurar EmailJS)
+  setTimeout(() => {
+    // Para demonstração, vamos simular um envio bem-sucedido
+    showFeedback('success', 'Mensagem enviada com sucesso! Entrarei em contato em breve.');
+    form.reset();
+    formBtn.innerHTML = originalText;
+    formBtn.setAttribute("disabled", "");
+    
+    // Descomente a linha abaixo quando configurar o EmailJS:
+    // sendEmail(formData);
+  }, 2000);
+});
 
 // adicionar evento a todos os campos de entrada do formulário
 for (let i = 0; i < formInputs.length; i++) {
