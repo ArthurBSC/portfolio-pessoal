@@ -149,6 +149,7 @@ function showFeedback(type, message) {
   
   // Remover classes anteriores
   icon.className = 'feedback-icon';
+  feedbackDiv.className = 'form-feedback';
   
   if (type === 'success') {
     icon.classList.add('success');
@@ -156,15 +157,16 @@ function showFeedback(type, message) {
   } else {
     icon.classList.add('error');
     icon.setAttribute('name', 'close-circle');
+    feedbackDiv.classList.add('error');
   }
   
   messageElement.textContent = message;
   feedbackDiv.style.display = 'block';
   
-  // Esconder feedback após 5 segundos
+  // Esconder feedback após 4 segundos
   setTimeout(() => {
     feedbackDiv.style.display = 'none';
-  }, 5000);
+  }, 4000);
 }
 
 // Função para enviar email
@@ -180,19 +182,28 @@ function sendEmail(formData) {
     from_name: formData.get('fullname'),
     from_email: formData.get('email'),
     message: formData.get('message'),
-    to_email: 'arthurbrunocesar2005@hotmail.com' // Seu email
+    to_email: 'arthurbrunocesar2005@hotmail.com' // meu email
   };
+
+  // Log dos parâmetros para debug
+  console.log('Enviando email com parâmetros:', templateParams);
+  console.log('Service ID:', 'service_uk1kdcb');
+  console.log('Template ID:', 'template_lire0mk');
 
   // Usar o template ID configurado
   emailjs.send('service_uk1kdcb', 'template_lire0mk', templateParams)
     .then(function(response) {
-      console.log('Email enviado com sucesso!', response.status, response.text);
-      showFeedback('success', 'Mensagem enviada com sucesso! Entrarei em contato em breve.');
+      console.log('✅ Email enviado com sucesso!');
+      console.log('Status:', response.status);
+      console.log('Response:', response.text);
+      showFeedback('success', 'Enviado!');
       form.reset(); // Limpar formulário
       formBtn.setAttribute("disabled", ""); // Desabilitar botão novamente
     }, function(error) {
-      console.log('Erro ao enviar email:', error);
-      showFeedback('error', 'Erro ao enviar mensagem. Tente novamente ou entre em contato diretamente pelo email.');
+      console.error('❌ Erro ao enviar email:', error);
+      console.error('Código do erro:', error.status);
+      console.error('Texto do erro:', error.text);
+      showFeedback('error', 'Erro ao enviar. Tente novamente.');
     });
 }
 
