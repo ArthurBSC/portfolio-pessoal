@@ -121,10 +121,25 @@ const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
 const feedbackDiv = document.getElementById("form-feedback");
 
-// Inicializar EmailJS
-(function() {
-  emailjs.init("qrJ2dd-cwR4evnVYu"); // Chave pública do EmailJS
-})();
+// Função para inicializar EmailJS quando disponível
+function initializeEmailJS() {
+  if (typeof emailjs !== 'undefined') {
+    try {
+      emailjs.init("qrJ2dd-cwR4evnVYu"); // Chave pública do EmailJS
+      console.log('EmailJS inicializado com sucesso');
+    } catch (error) {
+      console.error('Erro ao inicializar EmailJS:', error);
+    }
+  } else {
+    console.warn('EmailJS não está disponível');
+  }
+}
+
+// Aguardar carregamento completo da página
+document.addEventListener('DOMContentLoaded', function() {
+  // Tentar inicializar EmailJS após um pequeno delay
+  setTimeout(initializeEmailJS, 100);
+});
 
 // Função para mostrar feedback
 function showFeedback(type, message) {
@@ -154,6 +169,13 @@ function showFeedback(type, message) {
 
 // Função para enviar email
 function sendEmail(formData) {
+  // Verificar se EmailJS está disponível
+  if (typeof emailjs === 'undefined') {
+    console.error('EmailJS não está carregado');
+    showFeedback('error', 'Serviço de email não disponível. Tente novamente mais tarde.');
+    return;
+  }
+
   const templateParams = {
     from_name: formData.get('fullname'),
     from_email: formData.get('email'),
@@ -161,7 +183,7 @@ function sendEmail(formData) {
     to_email: 'arthurbrunocesar2005@hotmail.com' // Seu email
   };
 
-  // Substitua 'YOUR_TEMPLATE_ID' pelo ID do template criado no EmailJS
+  // Usar o template ID configurado
   emailjs.send('service_uk1kdcb', 'template_lire0mk', templateParams)
     .then(function(response) {
       console.log('Email enviado com sucesso!', response.status, response.text);
@@ -191,17 +213,16 @@ form.addEventListener('submit', function(e) {
   formBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon><span>Enviando...</span>';
   formBtn.setAttribute("disabled", "");
   
-  // Simular envio (substitua por sendEmail(formData) quando configurar EmailJS)
-  setTimeout(() => {
-    // Para demonstração, vamos simular um envio bem-sucedido
-    showFeedback('success', 'Mensagem enviada com sucesso! Entrarei em contato em breve.');
-    form.reset();
+  // Tentar enviar email real
+  try {
+    sendEmail(formData);
     formBtn.innerHTML = originalText;
-    formBtn.setAttribute("disabled", "");
-    
-    // Descomente a linha abaixo quando configurar o EmailJS:
-    // sendEmail(formData);
-  }, 2000);
+  } catch (error) {
+    console.error('Erro ao enviar email:', error);
+    showFeedback('error', 'Erro ao enviar mensagem. Tente novamente.');
+    formBtn.innerHTML = originalText;
+    formBtn.removeAttribute("disabled");
+  }
 });
 
 // adicionar evento a todos os campos de entrada do formulário
