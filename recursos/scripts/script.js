@@ -121,9 +121,9 @@ const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
 const feedbackDiv = document.getElementById("form-feedback");
 
-// Inicializar EmailJS (você precisará substituir por suas próprias credenciais)
+// Inicializar EmailJS
 (function() {
-  emailjs.init("YOUR_PUBLIC_KEY"); // Substitua pela sua chave pública do EmailJS
+  emailjs.init("qrJ2dd-cwR4evnVYu"); // Chave pública do EmailJS
 })();
 
 // Função para mostrar feedback
@@ -161,8 +161,8 @@ function sendEmail(formData) {
     to_email: 'arthurbrunocesar2005@hotmail.com' // Seu email
   };
 
-  // Substitua 'YOUR_SERVICE_ID' e 'YOUR_TEMPLATE_ID' pelas suas credenciais do EmailJS
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+  // Substitua 'YOUR_TEMPLATE_ID' pelo ID do template criado no EmailJS
+  emailjs.send('service_uk1kdcb', 'template_lire0mk', templateParams)
     .then(function(response) {
       console.log('Email enviado com sucesso!', response.status, response.text);
       showFeedback('success', 'Mensagem enviada com sucesso! Entrarei em contato em breve.');
