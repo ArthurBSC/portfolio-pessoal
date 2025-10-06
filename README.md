@@ -33,27 +33,6 @@ Este é o portfólio pessoal de **Arthur Silva**, um desenvolvedor de 20 anos de
 - ✅ Animações CSS suaves
 - ✅ Otimizado para SEO
 
-## Estrutura do Projeto
-
-```
-portfolio-pessoal/
-├── recursos/
-│   ├── estilos/
-│   │   └── style.css
-│   ├── scripts/
-│   │   └── script.js
-│   └── imagens/
-│       ├── avatar-*.png
-│       ├── blog-*.jpg
-│       ├── project-*.jpg/png
-│       └── logo-*.png
-├── imagens-demo-site/
-│   ├── desktop.png
-│   └── mobile.png
-├── index.html
-└── README.md
-```
-
 ## Seções do Portfólio
 
 1. **Sobre** - Apresentação pessoal e serviços oferecidos
